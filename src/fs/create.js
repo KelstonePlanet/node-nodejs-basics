@@ -1,13 +1,18 @@
-import fs from "fs/promises";
+import { promises } from "fs";
+import path from "node:path";
+import url from "node:url";
+
 const create = async () => {
     // Write your code here
+    const filename = url.fileURLToPath(import.meta.url);
+    const dirname = path.dirname(filename);
     try {
-        await fs.access("./src/fs/files/fresh.txt");
+        await promises.access(path.join(dirname, "files", "fresh.txt"));
         throw new Error("FS operation failed");
     } catch (error) {
         if (error.code === "ENOENT") {
             try {
-                await fs.writeFile("./src/fs/files/fresh.txt", "I am young");
+                await promises.writeFile(path.join(dirname, "files", "fresh.txt"), "I am young");
             } catch (error) {
                 console.log(error);
             }
